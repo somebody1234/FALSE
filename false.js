@@ -10,7 +10,6 @@ var ini = 0;		// index into input
 var doDump = false;	// whether to dump state
 var doStep = false;	// whether to dump state every tick
 var input = "";
-var postInput = "";
 
 Array.prototype.pick = function(n) { return this[this.length-n-1] }
 
@@ -185,18 +184,6 @@ Arguments:\n\
 	process.exit(0);
 }
 
-function readStdin() {
-	return new Promise(function(resolve, reject) {
-		process.stdin.on('data', function(chunk) {
-			postInput += chunk;
-		});
-
-		process.stdin.on('end', function() {
-			resolve();
-		});
-	});
-}
-
 function handleArgs() {
 	if (process.argv.length <= 2) {
 		help;
@@ -257,7 +244,9 @@ function handleArgs() {
 				break;
 		}
 	}
-	input += postInput;
+	process.stdin.on('data', function(chunk) {
+		input += chunk;
+	});
 	if (doStep) {
 		step();
 	} else {
@@ -265,4 +254,4 @@ function handleArgs() {
 	}
 }
 
-readStdin().then(handleArgs);
+handleArgs();
