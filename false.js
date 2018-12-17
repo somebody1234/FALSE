@@ -10,6 +10,7 @@ var ini = 0;		// index into input
 var doDump = false;	// whether to dump state
 var doStep = false;	// whether to dump state every tick
 var input = "";
+var postInput = "";
 
 Array.prototype.pick = function(n) { return this[this.length-n-1] }
 
@@ -187,7 +188,7 @@ Arguments:\n\
 function readStdin() {
 	return new Promise(function(resolve, reject) {
 		process.stdin.on('data', function(chunk) {
-			input += chunk;
+			postInput += chunk;
 		});
 
 		process.stdin.on('end', function() {
@@ -256,6 +257,7 @@ function handleArgs() {
 				break;
 		}
 	}
+	input += postInput;
 	if (doStep) {
 		step();
 	} else {
