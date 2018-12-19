@@ -247,11 +247,13 @@ function handleArgs() {
 	process.stdin.on('data', function(chunk) {
 		input += chunk;
 	});
-	if (doStep) {
-		step();
-	} else {
-		run();
-	}
+	setTimeout(function() {
+		if (doStep) {
+			step();
+		} else {
+			run();
+		}
+	}, 10);
 }
 
 handleArgs();
